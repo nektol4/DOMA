@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Пример простой страницы html</title>
+</head>
+<body>
+    <h1>Добро пожаловать!</h1>
+    <p>Это моя первая HTML-страница, отданная через FastAPI.</p>
+</body>
+</html>
+
+
+
+from fastapi import FastAPI
+from fastapi.responses import FileResponse
+import os
+
+app = FastAPI()
+
+@app.get("/")
+def read_root():
+    # Полный путь к файлу index.html
+    file_path = os.path.join(os.path.dirname(__file__), "index.html")
+    return FileResponse(file_path, media_type="text/html")
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("app2:app", host="127.0.0.1", port=8001, reload=True)
