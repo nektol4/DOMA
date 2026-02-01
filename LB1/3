@@ -1,0 +1,12 @@
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.post("/calculate")
+def calculate_sum(num1: int, num2: int):
+    result = num1 + num2
+    return {"result": result}
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("app3:app", host="127.0.0.1", port=8002, reload=True)
