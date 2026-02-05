@@ -1,0 +1,36 @@
+from pydantic import BaseModel, field_validator
+from typing import List
+
+
+class User(BaseModel):
+    name: str
+    id: int
+
+
+class UserWithAge(BaseModel):
+    name: str
+    age: int
+
+
+class Feedback(BaseModel):
+    name: str
+    message: str
+
+    @field_validator('name')
+    def validate_name_length(cls, v):
+        if len(v) < 2 or len(v) > 50:
+            raise ValueError('Имя должно быть от 2 до 50 символов')
+        return v
+
+    @field_validator('message')
+    def validate_message_length_and_content(cls, v):
+
+        if len(v) < 10 or len(v) > 500:
+            raise ValueError('Сообщение должно быть от 10 до 500 символов')
+
+        forbidden_words = ["редиска", "бяка", "козявка"]
+        lower_message = v.lower()
+        for word in forbidden_words:
+            if word in lower_message:
+                raise ValueError('Использование недопустимых слов')
+        return v
