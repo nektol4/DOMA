@@ -1,0 +1,43 @@
+from fastapi import FastAPI
+from models import User, UserWithAge, Feedback
+from typing import List
+
+app = FastAPI(title="лабораторная работа")
+
+
+users_list = []
+feedbacks_list = []
+
+
+user_instance = User(name="John Doe", id=1)
+users_list.append(user_instance)
+
+@app.get("/users", response_model=List[User])
+def get_users():
+
+    return users_list
+
+
+@app.post("/user", response_model=dict)
+def check_adult_user(user: UserWithAge):
+
+
+    is_adult = user.age >= 18
+    return {
+        "name": user.name,
+        "age": user.age,
+        "is_adult": is_adult
+    }
+
+@app.post("/feedback-basic")
+def receive_feedback_basic(feedback: Feedback):
+
+    feedbacks_list.append(feedback)
+    return {"message": f"Feedback received. Thank you, {feedback.name}."}
+
+@app.post("/feedback", response_model=dict)
+def receive_feedback(feedback: Feedback):
+
+    feedbacks_list.append(feedback)
+    return {"message": f"Спасибо, {feedback.name}! Ваш отзыв сохранён."}
+
